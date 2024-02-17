@@ -23,4 +23,4 @@ $document->process();
 /**
  * Print the data from the document.
  */
-echo print_r($document->render());
+print_r($document->render());
