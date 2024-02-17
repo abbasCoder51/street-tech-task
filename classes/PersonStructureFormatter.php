@@ -91,10 +91,10 @@ class PersonStructureFormatter
      */
     public function initialise(array $person): void
     {
-        $this->title = $person[0];
-        $this->firstName = count($person) == 2 ? null : ((strlen($person[1]) <= 2) ? null : $person[1]);
-        $this->initial = strlen($person[1]) <= 2 ? $person[1] : null;
-        $this->lastName = count($person) == 3 ? $person[2] : $person[1];
+        $this->title = trim($person[0]);
+        $this->firstName = count($person) == 2 ? null : ((strlen($person[1]) <= 2) ? null : trim($person[1]));
+        $this->initial = strlen($person[1]) <= 2 ? trim($person[1]) : null;
+        $this->lastName = count($person) == 3 ? trim($person[2]) : trim($person[1]);
     }
 
     /**
