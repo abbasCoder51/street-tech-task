@@ -42,9 +42,9 @@ class CsvDataReader extends DataReader
     public function processData(): void
     {
         $index = 0;
-        // For each array item, split up the string into an array
+        
         foreach($this->data as $person) {
-            if($index == 8) {
+            if(empty($person)) {
                 break;
             }
 

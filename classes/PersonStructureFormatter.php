@@ -43,18 +43,22 @@ class PersonStructureFormatter
         $person = str_replace(",", "", $person);
         $personArray = explode(" ", $person);
 
-        // Check if 'and' or '&' exists in the array
-        if(($resultFoundAnd1 = array_search('and', $personArray) || $resultFoundAnd2 = array_search('&', $personArray)) > 0) {
-            // Will need to create a two dimensional array, because of the appearance of the 'and' or '&'
+        // Check if 'and' or '&' exists in the array, value should be greater than 0
+        $andFoundInArray = array_search('and', $personArray) || array_search('&', $personArray);
+        if($andFoundInArray) {
 
-            $leftPart = array_splice($personArray, 0, $resultFoundAnd1);
-            $rightPart = array_splice($personArray, $resultFoundAnd1);
+            $andIndexLocation = array_search('and', $personArray) ? array_search('and', $personArray) : array_search('&', $personArray);
+
+            // Will need to create a two dimensional array, because of the appearance of the 'and' or '&'
+            $leftPart = array_splice($personArray, 0, $andIndexLocation);
+            $rightPart = array_splice($personArray, 1);
 
             $personMatrix = [];
             foreach($rightPart as $index => $value) {
                 if((count($leftPart) > 2)) {
                     continue;
                 }
+                
                 if($index == 0) {
                     continue;
                 }
