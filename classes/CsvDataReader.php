@@ -49,14 +49,10 @@ class CsvDataReader extends DataReader
             }
 
             $formattedValue = $this->personStructureFormatter->process($person);
+            $formattedValue = is_array($formattedValue[0]) ? $formattedValue : [$formattedValue];
 
-            if(is_array($formattedValue[0])) {
-                foreach($formattedValue as $formattedValueItem) {
-                    $this->personStructureFormatter->initialise($formattedValueItem);
-                    $this->formattedData[] = $this->personStructureFormatter->display();
-                }
-            } else {
-                $this->personStructureFormatter->initialise($formattedValue);
+            foreach($formattedValue as $formattedValueItem) {
+                $this->personStructureFormatter->initialise($formattedValueItem);
                 $this->formattedData[] = $this->personStructureFormatter->display();
             }
             
