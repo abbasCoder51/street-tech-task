@@ -3,10 +3,20 @@
 namespace Classes;
 
 use Classes\DataReader;
+use Classes\PersonStructureFormatter as PersonStructureFormatter;
 use Exception;
 
 class CsvDataReader extends DataReader
 {
+    private array $formattedData;
+
+    private PersonStructureFormatter $personStructureFormatter;
+
+    function __construct()
+    {
+        $this->personStructureFormatter = new PersonStructureFormatter();
+    }
+
     public function fetchData($data): void
     {
         $dataArray = [];
@@ -24,11 +34,27 @@ class CsvDataReader extends DataReader
             throw new Exception("File Not Found");
         }
 
-        $this->data = $dataArray;
+        unset($dataArray[0]);
+
+        $this->data = array_values($dataArray);
     }
 
-    public function processData()
+    public function processData(): void
     {
-        return $this->data;
+        $index = 0;
+        // For each array item, split up the string into an array
+        foreach($this->data as $person) {
+            if($index == 4) {
+                break;
+            }
+            $this->personStructureFormatter->format($person);
+            $this->formattedData[] = $this->personStructureFormatter->display();
+            $index++;
+        }
+    }
+
+    public function printData()
+    {
+        return $this->formattedData;
     }
 }
