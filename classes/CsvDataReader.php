@@ -44,16 +44,27 @@ class CsvDataReader extends DataReader
         $index = 0;
         // For each array item, split up the string into an array
         foreach($this->data as $person) {
-            if($index == 4) {
+            if($index == 8) {
                 break;
             }
-            $this->personStructureFormatter->format($person);
-            $this->formattedData[] = $this->personStructureFormatter->display();
+
+            $formattedValue = $this->personStructureFormatter->process($person);
+
+            if(is_array($formattedValue[0])) {
+                foreach($formattedValue as $formattedValueItem) {
+                    $this->personStructureFormatter->initialise($formattedValueItem);
+                    $this->formattedData[] = $this->personStructureFormatter->display();
+                }
+            } else {
+                $this->personStructureFormatter->initialise($formattedValue);
+                $this->formattedData[] = $this->personStructureFormatter->display();
+            }
+            
             $index++;
         }
     }
 
-    public function printData()
+    public function printData(): array
     {
         return $this->formattedData;
     }

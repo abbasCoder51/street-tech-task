@@ -4,12 +4,41 @@ namespace Classes;
 
 class PersonStructureFormatter 
 {
+    /**
+     * Title of person
+     * 
+     * @var string
+     */
     private string $title;
-    private string|null $firstName;
-    private string|null $initial;
+
+    /**
+     * First name of person
+     * 
+     * @var string|null
+     */
+    private ?string $firstName;
+
+    /**
+     * Initial of person
+     * 
+     * @var string|null
+     */
+    private ?string $initial;
+
+    /**
+     * Last name of person
+     * 
+     * @var string
+     */
     private string $lastName;
 
-    public function format(string $person): void
+    /**
+     * Process the data for the person
+     * 
+     * @param string $person The person data to process
+     * @return array Returns an array containing the processed data
+     */
+    public function process(string $person): array
     {
         $person = str_replace(",", "", $person);
         $personArray = explode(" ", $person);
@@ -21,8 +50,11 @@ class PersonStructureFormatter
             $leftPart = array_splice($personArray, 0, $resultFoundAnd1);
             $rightPart = array_splice($personArray, $resultFoundAnd1);
 
-            $newTempArray = [];
+            $personMatrix = [];
             foreach($rightPart as $index => $value) {
+                if((count($leftPart) > 2)) {
+                    continue;
+                }
                 if($index == 0) {
                     continue;
                 }
@@ -30,29 +62,37 @@ class PersonStructureFormatter
                 array_push($leftPart, $value);
             }
 
-            $newTempArray[] = $leftPart;
-            $newTempArray[] = $rightPart;
+            $personMatrix[] = $leftPart;
+            $personMatrix[] = $rightPart;
+
+            return $personMatrix;
         }
 
-        // Check if the second array item is an 'and', '&', 
-        // 'single character', 'single character with . at the end'
-
-        $this->title = $personArray[0];
-        $this->firstName = $personArray[1];
-        $this->initial = null;
-        $this->lastName = $personArray[2];
-
-        // value 1 = title
-
-        // value 2 = first_name, set as null if doesn't exist
-
-        // value 3 = initial , if has e.g. F. then it's considered an initial, set as null if it doesn't exist
-
-        // value 4 = last_name
-
-        // if there is '&' or 'and' this becomes two people so an additional record is created
+        return $personArray;
     }
 
+    /**
+     * Initialise the data for the person
+     * 
+     * @param array $person The person data to initialise
+     * @return void
+     */
+    public function initialise(array $person): void
+    {
+        // Need to check length of array, 
+        // If = 2, then title and lastName
+        // If = 3, then either firstName or initial, have to check the name of 1st index file, a single character or a single character and a dot
+        $this->title = $person[0];
+        $this->firstName = count($person) == 2 ? null : ((strlen($person[1]) <= 2) ? null : $person[1]);
+        $this->initial = strlen($person[1]) <= 2 ? $person[1] : null;
+        $this->lastName = count($person) == 3 ? $person[2] : $person[1];
+    }
+
+    /**
+     * Display the data of the person
+     * 
+     * @return array returns an array of the person
+     */
     public function display(): array
     {
         return [
