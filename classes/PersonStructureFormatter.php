@@ -2,35 +2,26 @@
 
 namespace Classes;
 
+use Models\PersonModel;
+
 class PersonStructureFormatter 
 {
     /**
-     * Title of person.
+     * Person Model.
      * 
-     * @var string
+     * @var PersonModel $personModel
      */
-    private string $title;
-
+    private PersonModel $personModel;
+    
     /**
-     * First name of person.
+     * Constructor.
      * 
-     * @var string|null
+     * Initialise a Person model in the PersonStructureFormatter.
      */
-    private ?string $firstName;
-
-    /**
-     * Initial of person.
-     * 
-     * @var string|null
-     */
-    private ?string $initial;
-
-    /**
-     * Last name of person.
-     * 
-     * @var string
-     */
-    private string $lastName;
+    public function __construct()
+    {
+        $this->personModel = new PersonModel(); 
+    }
 
     /**
      * Process the data for the person.
@@ -91,10 +82,10 @@ class PersonStructureFormatter
      */
     public function initialise(array $person): void
     {
-        $this->title = trim($person[0]);
-        $this->firstName = count($person) == 2 ? null : ((strlen($person[1]) <= 2) ? null : trim($person[1]));
-        $this->initial = strlen($person[1]) <= 2 ? trim($person[1]) : null;
-        $this->lastName = count($person) == 3 ? trim($person[2]) : trim($person[1]);
+        $this->personModel->setTitle(trim($person[0]));
+        $this->personModel->setFirstName(count($person) == 2 ? null : ((strlen($person[1]) <= 2) ? null : trim($person[1])));
+        $this->personModel->setInitial(strlen($person[1]) <= 2 ? trim($person[1]) : null);
+        $this->personModel->setLastName(count($person) == 3 ? trim($person[2]) : trim($person[1]));
     }
 
     /**
@@ -105,10 +96,10 @@ class PersonStructureFormatter
     public function display(): array
     {
         return [
-            'title' => $this->title,
-            'first_name' => $this->firstName,
-            'initial' => $this->initial,
-            'last_name' => $this->lastName
+            'title' => $this->personModel->getTitle(),
+            'first_name' => $this->personModel->getFirstName(),
+            'initial' => $this->personModel->getInitial(),
+            'last_name' => $this->personModel->getLastName()
         ];
     }
 }
