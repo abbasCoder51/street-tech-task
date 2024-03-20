@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# Path to PHPUnit executable
+phpunit_path="./vendor/bin/phpunit"
+
+# run PHPUnit with arguments
+$phpunit_path "$@"
